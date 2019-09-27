@@ -1,0 +1,320 @@
+{
+	"info": {
+		"_postman_id": "bcc824e4-0b98-44d4-9b44-f4198d0e2c2d",
+		"name": "sample-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetRoom",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b2e7b977-1638-4b48-b3e8-5178d3678f06",
+						"exec": [
+							"// // Check for identical responses",
+							"  pm.test('Should have identical responses', () => {",
+							"     pm.response.to.have.body(expextedResponse);",
+							" });",
+							"",
+							"//Check response code",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							" ",
+							"//Check response time",
+							"pm.test(\"Response time is less than 3000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(3000);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "d167267f-6539-415a-b85f-354cfdb7e7ad",
+						"exec": [
+							"// Do mock GET to fetch the expected json response from mockserver ",
+							"pm.sendRequest({url: 'https://25f7f49f-6b09-4110-aa89-00a8a63fe49f.mock.pstmn.io/room/' }, function (err,res){",
+							"    expextedResponse =res.json()",
+							"    console.log(expextedResponse);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/room/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"room",
+						""
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "GetRoom-MockResponse",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/room/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"room",
+								""
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 20 Sep 2019 06:11:46 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json;charset=UTF-8"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Via",
+							"value": "1.1 google"
+						},
+						{
+							"key": "Expect-CT",
+							"value": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\""
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "5191a4d82f7bdd1a-SIN"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"rooms\": [\n        {\n            \"roomid\": 1,\n            \"roomNumber\": 101,\n            \"type\": \"Single\",\n            \"accessible\": true,\n            \"image\": \"https://automationintesting.com/images/supporters/saucelabs/single.jpg\",\n            \"description\": \"Our live testing room, perfect for those who need a solution for their cross browser exploratory testing\",\n            \"features\": [\n                \"TV\"\n            ],\n            \"roomPrice\": 19\n        },\n        {\n            \"roomid\": 2,\n            \"roomNumber\": 102,\n            \"type\": \"Double\",\n            \"accessible\": true,\n            \"image\": \"https://automationintesting.com/images/supporters/saucelabs/double.jpg\",\n            \"description\": \"This room offers you the ability to run your automated tests across all sorts of fun stuff. Browsers, devices, and more...\",\n            \"features\": [\n                \"TV, Views\"\n            ],\n            \"roomPrice\": 149\n        },\n        {\n            \"roomid\": 3,\n            \"roomNumber\": 201,\n            \"type\": \"Family\",\n            \"accessible\": true,\n            \"image\": \"https://automationintesting.com/images/supporters/saucelabs/family.jpg\",\n            \"description\": \"Need a bit more space to run your automation, this room with unlimited views (and minutes) is the one for you\",\n            \"features\": [\n                \"Wifi, TV, Safe, Views\"\n            ],\n            \"roomPrice\": 349\n        },\n        {\n            \"roomid\": 4,\n            \"roomNumber\": 301,\n            \"type\": \"Suite\",\n            \"accessible\": true,\n            \"image\": \"https://automationintesting.com/images/supporters/saucelabs/suite.jpg\",\n            \"description\": \"The enterprise solution for all your continuous testing needs, the best views and the most awesome devices!\",\n            \"features\": [\n                \"Wifi, TV, Safe, Radio, Refreshments, Views\"\n            ],\n            \"roomPrice\": 500\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "PostLogin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "81c7cca0-090d-473e-a990-9484d05236fb",
+						"exec": [
+							"//Validate Schema",
+							" pm.test('Validate Json Schema', function() {",
+							"     var result=tv4.validateResult(JSON.parse(responseBody), schema);",
+							"   ",
+							"     if(!result.valid){",
+							"         console.log(result);",
+							"     }",
+							"     pm.expect(result.valid).to.be.true;",
+							" })",
+							"//Check response code",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							" ",
+							"//Check response time",
+							"pm.test(\"Response time is less than 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "1e6e0afd-1e29-4197-91f2-13aa7293fe3a",
+						"exec": [
+							"// Do POST to fetch the expected json schema as response from mockserver ",
+							"",
+							"schema={}",
+							"pm.sendRequest({url: 'https://25f7f49f-6b09-4110-aa89-00a8a63fe49f.mock.pstmn.io/auth/login/',",
+							"  method: 'POST',",
+							"  header: 'Content-Type:application/json',",
+							"    body: {",
+							"        mode: 'raw',",
+							"        raw: JSON.stringify({ username: \"admin\", password: \"password\" })",
+							"    }",
+							"    }, function (err, response) {",
+							"    ",
+							"    schema=response.json()",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"username\":\"admin\",\n\"password\": \"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/auth/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "PostLogin-MockResponse",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"username\":\"admin\",\n\"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/auth/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 13 Sep 2019 07:48:29 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json;charset=UTF-8"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Via",
+							"value": "1.1 google"
+						},
+						{
+							"key": "Expect-CT",
+							"value": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\""
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "515884e19b18be32-MXP"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"token\": {\n      \"type\": \"string\"\n    }\n  },\n  \"required\": [\n    \"token\"\n  ]\n}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "22f6946d-9b57-4924-809d-eb40b47da54b",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "b562c5ce-a609-45b3-b0a7-b507512b1ae3",
+				"type": "text/javascript",
+				"exec": [
+					"pm.sendRequest()"
+				]
+			}
+		}
+	]
+}
